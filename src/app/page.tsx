@@ -16,6 +16,7 @@ export default function Home() {
   const [isListening, setIsListening] = useState<boolean>(false);
   const [recognition, setRecognition] = useState<any>(null);
   const [aiResponse, setAiResponse] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     // Initialize speech recognition
@@ -64,8 +65,46 @@ export default function Home() {
   }, [isListening, recognition]);
 
   async function sendOpenai() {
-    
+    if (!userSpeech){return}
+
+    try {
+      const response = await fetch('http://localhost:8000/chatbot/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({user_input: userSpeech})
+      })
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+  
+      const data = await response.json();
+      setAiResponse(data.content);
+
+      speakText(data.content);
+    } catch (error) {
+      console.error('Error:', error);
+      setAiResponse('Sorry, something went wrong.');
+    } finally {
+      setIsLoading(false);
+    }
   }
+  async function speakText(text: string) {
+    const speech = new SpeechSynthesisUtterance(text);
+    speech.lang = 'en-US'; // Language (change if needed)
+    speech.rate = 1; // Speaking speed (0.1 - 2)
+    speech.pitch = 1; // Voice pitch (0 - 2)
+
+    window.speechSynthesis.speak(speech);
+  };
+
+  async function signIn() {
+    window.location.href = 'http://localhost:8000/auth/login';
+  };
+
+
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 p-8">
@@ -73,7 +112,16 @@ export default function Home() {
         <h1 className="text-4xl font-bold text-center text-gray-800">
           Voice Assistant
         </h1>
-
+        <div className="">
+          <div className="flex">
+            <button
+                onClick={signIn}
+                className={`bg-gray-300 p-4 rounded-full font-medium transition-all`}
+              >
+                Sign in
+            </button>
+          </div>
+        </div>
         <div className="bg-white rounded-xl shadow-lg p-6 space-y-6">
           <div className="flex justify-center">
             <button
@@ -112,9 +160,15 @@ export default function Home() {
         <div className="">
           <div className="flex">
             <button
-              onClick={sendOpenai}
-              className={`bg-gray-300 p-4 rounded-full font-medium transition-all`}>
-              Send
+                onClick={sendOpenai}
+                disabled={isLoading || !userSpeech}
+                className={`
+                  bg-gray-300 p-4 rounded-full font-medium transition-all
+                  ${isLoading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-400'}
+                  ${!userSpeech ? 'opacity-50 cursor-not-allowed' : ''}
+                `}
+              >
+                {isLoading ? 'Sending...' : 'Send'}
             </button>
           </div>
         </div>

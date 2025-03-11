@@ -80,7 +80,7 @@ export default function Home() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ user_input: userSpeech, access_token: accessToken }),
+        body: JSON.stringify({ user_input: userSpeech, access_token: accessToken, refresh_token: refreshToken }),
       });
 
       if (!response.ok) {
@@ -88,8 +88,9 @@ export default function Home() {
       }
 
       const data = await response.json();
-      setAiResponse(data.content);
-      speakText(data.content);
+      console.log(data);
+      setAiResponse(data);
+      speakText(data);
     } catch (error) {
       console.error('Error:', error);
       setAiResponse('Sorry, something went wrong.');
@@ -147,7 +148,13 @@ export default function Home() {
     }
 
     try {
-      const response = await fetch(`http://localhost:8000/calendar/?access_token=${accessToken}&refresh_token=${refreshToken}`);
+      const response = await fetch("http://localhost:8000/chatbot/test_calendar/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ user_input: 'Work', access_token: accessToken, refresh_token: refreshToken }),
+      });
       const data = await response.json();
       console.log(data);
       setAiResponse(`You have ${data.length} events on your calendar.`);
@@ -194,7 +201,7 @@ export default function Home() {
               onClick={fetchGoogleCalendar}
               className="bg-green-300 p-4 rounded-full font-medium transition-all"
             >
-              Fetch Google Calendar Events
+              Ready
             </button>
           )}
         </div>

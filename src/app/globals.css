@@ -2,9 +2,173 @@
 @tailwind components;
 @tailwind utilities;
 
-
 body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: black;
+  color: white;
+}
+
+.full-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+}
+
+.intro-welcome-text-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 30px;
+  width: 100%;
+  max-width: 800px;
+  text-align: center;
+}
+
+.intro-welcome {
+  font-size: 2rem;
+  font-weight: 100;
+  color: #f5f5f5;
+  line-height: 1.3;
+  font-family: 'Inter', sans-serif;
+}
+
+
+@keyframes gentle-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+/* Add responsive font sizing for different screen sizes */
+@media (max-width: 768px) {
+  .intro-welcome {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .intro-welcome {
+    font-size: 2rem;
+  }
+}
+
+.mic-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+.mic-button {
+  background: linear-gradient(145deg, #00c6ff, #0072ff);
+  color: white;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 10px 20px rgba(0, 114, 255, 0.3),
+              0 0 0 5px rgba(0, 198, 255, 0.1),
+              inset 0 0 10px rgba(255, 255, 255, 0.2);
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  position: relative;
+  overflow: hidden;
+}
+
+.mic-button::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  animation: pulse 2s infinite;
+}
+
+.mic-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 15px 30px rgba(0, 114, 255, 0.4),
+              0 0 0 8px rgba(0, 198, 255, 0.2),
+              inset 0 0 15px rgba(255, 255, 255, 0.3);
+}
+
+.mic-button:active {
+  transform: scale(2);
+  background: linear-gradient(145deg, #0072ff, #00c6ff);
+}
+
+.mic-button i {
+  font-size: 32px;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  animation: fadeInOut 1.5s infinite alternate;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.7;
+  }
+  70% {
+    transform: scale(1.05);
+    opacity: 0.3;
+  }
+  100% {
+    transform: scale(0.95);
+    opacity: 0.7;
+  }
+}
+
+@keyframes fadeInOut {
+  from {
+    opacity: 0.7;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.highlight {
+  color: #DA70D6;
+  font-family: 'Lora', serif;
+  font-style: italic;
+  font-size: 1.6em; /* Larger to show importance */
+  transition: color 0.3s ease;
+  position: relative;
+  display: inline-block;
+}
+
+.highlight::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #DA70D6;
+  transition: width 0.3s ease;
+}
+
+.highlight:hover::after {
+  width: 100%;
 }

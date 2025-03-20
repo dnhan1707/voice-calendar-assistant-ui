@@ -148,6 +148,12 @@ html, body {
   }
 }
 
+.userspeech-container{
+  font-family: 'Lora', serif;
+  font-style: italic;
+  padding-top: 10px;
+}
+
 .highlight {
   color: #DA70D6;
   font-family: 'Lora', serif;

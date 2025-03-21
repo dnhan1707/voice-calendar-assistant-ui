@@ -17,6 +17,14 @@ export default function Home() {
   const [assistantResponse, setAssistantResponse] = useState<string>("");
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
 
+  const textToSpeech = (text: string) => {
+    const speech = new SpeechSynthesisUtterance(text);
+    speech.lang = 'en-US';
+    speech.rate = 1;
+    speech.pitch = 1;
+    window.speechSynthesis.speak(speech);
+  }
+
   const sendToServer = async(query: string) => {
     try {
       const response = await fetch("http://localhost:8000/chatbot/event", {
@@ -33,6 +41,7 @@ export default function Home() {
       }
       const data = await response.json();
       setAssistantResponse(data); 
+      textToSpeech(data)
       return data;
 
     } catch (error) {
